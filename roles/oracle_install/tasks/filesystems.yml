@@ -1,0 +1,29 @@
+---
+
+
+- name: set the ownerships oracle bin fs
+  file:
+    path: "{{ item }}"
+    owner: "{{ oracle_user[0].name }}"
+    group: "{{ oracle_group[0].name }}"
+    mode: "u=rwx,g=rwx,o=rx"
+    recurse: yes
+  with_items: 
+    - "{{ oracle_bin_fs }}"
+    - "{{ oracle_data_fs }}"
+
+- name: create the oracle installation path
+  file:
+    mode: 0755
+    path: "{{ oracle_base }}"
+    state: directory
+    group: "{{ oracle_group[0].name }}"
+    owner: "{{ oracle_user[0].name }}"
+
+- name: chown the oracle installer directory to the oracle user
+  file:
+    group: "{{ oracle_group[0].name }}"
+    owner: "{{ oracle_user[0].name }}"
+    path: "{{ oracle_tmp }}/database"
+    state: directory
+    recurse: yes
